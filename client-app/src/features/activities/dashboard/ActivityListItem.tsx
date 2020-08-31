@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Item, Button, Label, Segment, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-
+import { format } from 'date-fns'
 import ActivityStore from "../../../app/stores/activityStore";
 import { IActivity } from "@models/activity";
 
@@ -19,13 +19,13 @@ export const ActivityListItem: React.FC<{ activity: IActivity }> = ({
             <Item.Content>
               <Item.Header as="a">{activity.title}</Item.Header>
               <Item.Description>Hosted By Bob</Item.Description>
-              <Item.Meta>{activity.date}</Item.Meta>
+              <Item.Meta>{format(activity.date, 'h:mm a')}</Item.Meta>
             </Item.Content>
           </Item>
         </Item.Group>
 
         <Segment>
-          <Icon name="clock" /> {activity.date}
+          <Icon name="clock" /> {format(activity.date, 'h:mm a')}
           <Icon name="marker" /> {activity.venue}, {activity.city}
         </Segment>
         <Segment clearing>
