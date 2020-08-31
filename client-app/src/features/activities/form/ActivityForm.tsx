@@ -80,7 +80,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
           validate={validate}
             initialValues={activity}
             onSubmit={handleFinalFormSubmit}
-            render={({ handleSubmit }) => (
+            render={({ handleSubmit, invalid, pristine }) => (
               <Form onSubmit={handleSubmit} loading={loading}>
                 <Field
                   placeholder="Title"
@@ -132,7 +132,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   component={TextInput}
                 />
                 <Button
-                  loading={submitting}
+                  loading={submitting || invalid || pristine}
                   disabled={loading}
                   floated="right"
                   positive
