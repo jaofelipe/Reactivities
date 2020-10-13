@@ -1,0 +1,6 @@
+--Add microsoft user secret
+dotnet user-secrets init -p API
+--set
+dotnet user-secrets set "TokenKey" "super secret key" -p API
+--list
+dotnet user-secrets list -p API

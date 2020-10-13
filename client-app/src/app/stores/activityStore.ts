@@ -1,14 +1,18 @@
-import { observable, action, computed, configure, runInAction } from "mobx";
-import { createContext, SyntheticEvent } from "react";
+import { observable, action, computed, runInAction } from "mobx";
+import { SyntheticEvent } from "react";
 import { IActivity } from "@models/activity";
 import axios from "../services/api";
-import { history } from '../..' // comes from index.tsx createBrowserHistory
-import { toast } from 'react-toastify'
+import { history } from "../.."; // comes from index.tsx createBrowserHistory
+import { toast } from "react-toastify";
+import { RootStore } from "./rootStore";
 
 
-configure({ enforceActions: "always" }); //run in Strict mode
+export default class ActivityStore {
+  rootStore: RootStore;
+  constructor(rootStore: RootStore){
+    this.rootStore = rootStore;
+  }
 
-class ActivityStore {
   @observable activityRegistry = new Map();
   @observable loadingInitial = false;
   @observable activity: IActivity | null = null;
@@ -68,11 +72,11 @@ class ActivityStore {
       activity = await axios.Activities.details(id);
       runInAction("getting activity", () => {
         activity.date = new Date(activity.date);
-        this.activity = activity
+        this.activity = activity;
         this.activityRegistry.set(activity.id, activity);
         this.loadingInitial = false;
       });
-      return activity
+      return activity;
     } catch (error) {
       runInAction("get activity error", () => {
         this.submitting = false;
@@ -95,12 +99,12 @@ class ActivityStore {
         this.activityRegistry.set(activity.id, activity);
         this.submitting = false;
       });
-      history.push(`/activities/${activity.id}`)
+      history.push(`/activities/${activity.id}`);
     } catch (error) {
       runInAction("create activity error", () => {
         this.submitting = false;
       });
-      toast.error("Problem submitting data")
+      toast.error("Problem submitting data");
       console.log(error.response);
     }
   };
@@ -114,12 +118,12 @@ class ActivityStore {
         this.activity = activity;
         this.submitting = false;
       });
-      history.push(`/activities/${activity.id}`)
+      history.push(`/activities/${activity.id}`);
     } catch (error) {
       runInAction("edit activity error", () => {
         this.submitting = false;
       });
-      toast.error("Problem submitting data")
+      toast.error("Problem submitting data");
       console.log(error.response);
     }
   };
@@ -150,5 +154,3 @@ class ActivityStore {
     this.activity = this.activityRegistry.get(id); //before observable map this.activities.find(a => a.id === id)
   };
 }
-
-export default createContext(new ActivityStore());
